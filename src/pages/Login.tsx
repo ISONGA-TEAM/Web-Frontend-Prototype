@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import LanguageToggle from '../components/LanguageToggle';
-import { ArrowRight, ArrowUpRight, Eye, EyeOff, Leaf, Lock, ShieldCheck, Users, TrendingUp } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Eye, EyeOff, Leaf,ShieldCheck, Users, TrendingUp } from 'lucide-react';
 import { demoAccounts, demoPassword } from '../data/demo';
 import { demoHouseholds } from '../data/households';
 
@@ -37,7 +37,7 @@ const Login: React.FC = () => {
 
             <main className="mx-auto grid max-w-7xl overflow-hidden rounded-[28px] border border-primary/10 bg-white shadow-xl shadow-primary/5 lg:grid-cols-[1.1fr_1fr]">
                 <section className="relative flex flex-col justify-between overflow-hidden bg-[#173e31] p-7 text-white sm:p-12 lg:p-14">
-                    <div aria-hidden="true" className="pointer-events-none absolute -right-32 top-28 h-96 w-96 rounded-full border-[55px] border-white/[0.035]" />
+                    <div aria-hidden="true" className="pointer-events-none absolute -right-32 top-28 h-96 w-96 rounded-full border-white/[0.035]" />
                     <div className="relative">
                         <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1.5 text-xs font-medium text-emerald-100"><span className="h-1.5 w-1.5 rounded-full bg-amber-400" />{copy('Together, towards self-reliance', 'Hamwe, tugana ku kwigira')}</span>
                         <h1 className="mt-8 max-w-lg text-4xl leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl">{copy('Stronger households.', 'Imiryango ikomeye.')}<br /><span className="text-[#d7e9a6]">{copy('Brighter futures.', 'Ejo hazaza heza.')}</span></h1>
@@ -61,7 +61,7 @@ const Login: React.FC = () => {
                         <div><label htmlFor="password" className="mb-2 block text-sm font-semibold text-slate-700">{t('login.password')}</label><div className="relative"><input id="password" name="password" autoComplete="current-password" required value={password} onChange={e => { setPassword(e.target.value); setError(false); }} type={showPassword ? 'text' : 'password'} className="input-field h-12 bg-slate-50/50 pr-12" placeholder={copy('Enter your password', 'Andika ijambo ry’ibanga')} aria-invalid={error} aria-describedby={error ? 'login-error' : undefined} /><button type="button" aria-label={copy(showPassword ? 'Hide password' : 'Show password', showPassword ? 'Hisha ijambo ry’ibanga' : 'Erekana ijambo ry’ibanga')} aria-pressed={showPassword} onClick={() => setShowPassword(!showPassword)} className="absolute right-1 top-1 rounded-lg p-3 text-slate-500 hover:text-primary">{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button></div></div>
                         <div className="text-right"><button type="button" onClick={() => setHelp(!help)} aria-expanded={help} className="text-sm font-semibold text-primary hover:underline">{t('login.forgot_password')}</button></div>
                         {help && <p className="rounded-lg bg-slate-50 p-3 text-sm text-slate-600">{copy('For this demo, use any account below with password', 'Kuri iki cyitegererezo, koresha konti iri hasi n’ijambo ry’ibanga')} <strong>{demoPassword}</strong>.</p>}
-                        {error && <p id="login-error" role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{copy('Username or password is incorrect. Try a demo account below.', 'Izina cyangwa ijambo ry’ibanga si byo. Gerageza konti iri hasi.')}</p>}
+                        {error && <p id="login-error" role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700"></p>}
                         <button type="submit" className="btn-primary flex h-12 w-full items-center justify-center gap-3">{t('login.sign_in')}<ArrowRight size={18} /></button>
                     </form>
                     <div className="mt-8 border-t border-slate-100 pt-6">
