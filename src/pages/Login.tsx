@@ -65,12 +65,11 @@ const Login: React.FC = () => {
                         <button type="submit" className="btn-primary flex h-12 w-full items-center justify-center gap-3">{t('login.sign_in')}<ArrowRight size={18} /></button>
                     </form>
                     <div className="mt-8 border-t border-slate-100 pt-6">
-                        <div className="flex items-center justify-between gap-2"><h3 className="text-sm font-semibold">{copy('Explore with a demo account', 'Gerageza konti y’icyitegererezo')}</h3><span className="rounded bg-amber-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-800">Demo</span></div>
-                        <p className="mt-2 text-xs leading-5 text-slate-500">{copy('Choose an account to fill in your credentials. All records are fictional.', 'Hitamo konti wuzuze amakuru yo kwinjira. Amakuru yose ni ay’icyitegererezo.')}</p>
-                        <p className="mt-2 text-xs text-slate-600">{copy('Demo password', 'Ijambo ry’ibanga ry’icyitegererezo')}: <code className="font-semibold">{demoPassword}</code></p>
+                        <div className="flex items-center justify-between gap-2"></div>
+
+                       
                         <div className="mt-4 flex flex-wrap gap-2">{demoAccounts.map(account => <button key={account.id} type="button" onClick={() => { setUsername(account.username); setPassword(demoPassword); setError(false); }} className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 transition-colors hover:border-primary hover:bg-primary/5 hover:text-primary">{t(`roles.${account.role}`)}<ArrowUpRight size={13} /></button>)}</div>
-                    </div>
-                    <p className="mt-7 flex items-center gap-2 text-xs text-slate-400"><Lock size={13} />{copy('Prototype workspace · Demo access only', 'Urubuga rw’icyitegererezo')}</p>
+                    </div>  
                 </section>
             </main>
             <footer className="mx-auto mt-6 max-w-7xl text-center text-xs text-slate-400">Isonga · {copy('Household Graduation Platform', 'Urubuga rw’iterambere ry’imiryango')}</footer>
