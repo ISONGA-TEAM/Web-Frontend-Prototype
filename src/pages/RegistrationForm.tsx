@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../context/AuthContext';
 import {
     ChevronRight,
     ChevronLeft,
@@ -25,7 +24,6 @@ function cn(...inputs: ClassValue[]) {
 const RegistrationForm: React.FC = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { login } = useAuth();
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [nidFound, setNidFound] = useState(false);
@@ -71,8 +69,7 @@ const RegistrationForm: React.FC = () => {
         setTimeout(() => {
             setLoading(false);
             setRegistered(true);
-            // Auto-login as the agenti role and redirect to dashboard
-            login('agenti');
+            // Keep the signed-in account when returning to the dashboard.
             setTimeout(() => navigate('/dashboard'), 1500);
         }, 2000);
     };

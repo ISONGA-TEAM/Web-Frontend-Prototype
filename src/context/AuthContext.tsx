@@ -1,10 +1,9 @@
 import React, { createContext, useContext, useState } from 'react';
-import type { User, Role } from '../types';
+import type { User } from '../types';
 import { authenticateDemo } from '../data/demo';
 
 interface AuthContextType {
     user: User | null;
-    login: (role: Role) => void;
     logout: () => void;
     signIn: (username: string, password: string) => boolean;
     isAuthenticated: boolean;
@@ -13,37 +12,22 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(() => {
-        const savedUser = localStorage.getItem('isonga_user');
-        return savedUser ? JSON.parse(savedUser) : null;
-    });
-
-    const login = (role: Role) => {
-        const mockUser: User = {
-            id: '1',
-            name: 'Jean de Dieu Habimana',
-            email: 'jean.habimana@gov.rw',
-            role,
-        };
-        setUser(mockUser);
-        localStorage.setItem('isonga_user', JSON.stringify(mockUser));
-    };
+    // Start each app load at sign-in; old saved demo sessions must not bypass it.
+    const [user, setUser] = useState<User | null>(null);
 
     const signIn = (username: string, password: string) => {
         const account = authenticateDemo(username, password);
         if (!account) return false;
         setUser(account);
-        localStorage.setItem('isonga_user', JSON.stringify(account));
         return true;
     };
 
     const logout = () => {
         setUser(null);
-        localStorage.removeItem('isonga_user');
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, signIn, logout, isAuthenticated: !!user }}>
+        <AuthContext.Provider value={{ user, signIn, logout, isAuthenticated: !!user }}>
             {children}
         </AuthContext.Provider>
     );

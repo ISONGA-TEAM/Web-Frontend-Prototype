@@ -43,12 +43,20 @@ try {
     const transfers = render(Transfers, '/transfers');
     assert.equal((transfers.match(/aria-label="View CT-/g) || []).length, 7);
     for (const status of ['Approved', 'Pending', 'Rejected']) assert(transfers.includes(`status-${status.toLowerCase()}`));
-    const districtNav = render(Sidebar, '/dashboard');
-    assert.match(districtNav, /Calf Transfers/);
-    assert(!districtNav.includes('Users &amp; Roles'));
+    // Even a saved admin session must not automatically authenticate a new app load.
     currentUser = { ...currentUser, role: 'admin' };
-    assert.match(render(Sidebar, '/dashboard'), /Users &amp; Roles/);
-    console.log('PASS: household/animal/transfer relationships, species totals, dashboard totals, both registry renders, seven-row pagination, transfer statuses, and role-aware navigation.');
+    const guestNav = render(Sidebar, '/dashboard');
+    assert(!guestNav.includes('Users &amp; Roles'));
+    assert(!guestNav.includes('Calf Transfers'));
+    const { useAuth } = await server.ssrLoadModule('/src/context/AuthContext.tsx');
+    function AuthProbe() {
+        return React.createElement('span', null, useAuth().isAuthenticated ? 'authenticated' : 'login-required');
+    }
+    assert.match(render(AuthProbe, '/dashboard'), /login-required/);
+    const { authenticateDemo, demoAccounts, demoPassword } = await server.ssrLoadModule('/src/data/demo.ts');
+    for (const account of demoAccounts) assert.equal(authenticateDemo(account.username, demoPassword)?.role, account.role);
+    assert.equal(authenticateDemo('district.demo', 'incorrect'), null);
+    console.log('PASS: household/animal/transfer relationships, species totals, dashboard totals, both registry renders, seven-row pagination, transfer statuses, demo credentials, and login required despite a saved session.');
 } finally {
     await server.close();
     delete globalThis.localStorage;
