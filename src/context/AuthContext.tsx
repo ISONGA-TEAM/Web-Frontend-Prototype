@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState } from 'react';
 import type { User, Role } from '../types';
+import { authenticateDemo } from '../data/demo';
 
 interface AuthContextType {
     user: User | null;
     login: (role: Role) => void;
     logout: () => void;
+    signIn: (username: string, password: string) => boolean;
     isAuthenticated: boolean;
 }
 
@@ -27,13 +29,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem('isonga_user', JSON.stringify(mockUser));
     };
 
+    const signIn = (username: string, password: string) => {
+        const account = authenticateDemo(username, password);
+        if (!account) return false;
+        setUser(account);
+        localStorage.setItem('isonga_user', JSON.stringify(account));
+        return true;
+    };
+
     const logout = () => {
         setUser(null);
         localStorage.removeItem('isonga_user');
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+        <AuthContext.Provider value={{ user, login, signIn, logout, isAuthenticated: !!user }}>
             {children}
         </AuthContext.Provider>
     );

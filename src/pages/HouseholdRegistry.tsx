@@ -15,32 +15,7 @@ import {
 } from 'lucide-react';
 import type { Household } from '../types';
 
-// Mock data generator
-const generateMockHouseholds = (count: number): Household[] => {
-    const names = ['HABIMANA Jean', 'MUKAMANA Solange', 'NTAKIRUTIMANA Eric', 'UWIMANA Marie', 'GAKWAYA Silas', 'INGABIRE Alice', 'MUGABO David', 'NYIRAHABIMANA Beatrice', 'MUTANGUHA Paul', 'KAMANZI Alex'];
-    const sectors = ['Nyabihu', 'Muringa', 'Kabatwa', 'Jenda', 'Bigogwe'];
-    const status: Household['graduationStatus'][] = ['registered', 'assigned', 'enrolled', 'active', 'graduated'];
-
-    return Array.from({ length: count }, (_, i) => ({
-        id: `HH-${1000 + i}`,
-        headName: names[i % names.length],
-        nid: `11985800${1234567 + i}`,
-        ubudehe: (i % 4 + 1) as Household['ubudehe'],
-        location: {
-            district: 'Nyabihu',
-            sector: sectors[i % sectors.length],
-            cell: 'Gasiza',
-            village: 'Kovu'
-        },
-        programs: {
-            girinka: { status: i % 3 === 0 ? 'enrolled' : 'not_eligible', date: i % 3 === 0 ? '2023-05-12' : undefined },
-            vup: { status: i % 2 === 0 ? 'enrolled' : 'pending', date: i % 2 === 0 ? '2023-08-20' : undefined },
-            ejo_heza: { status: i % 4 === 0 ? 'active' : 'pending', date: i % 4 === 0 ? '2024-01-15' : undefined },
-        },
-        graduationStatus: status[i % 5],
-        lastUpdated: new Date().toISOString()
-    }));
-};
+import { demoHouseholds } from '../data/households';
 
 const HouseholdRegistry: React.FC = () => {
     const { t } = useTranslation();
@@ -52,7 +27,7 @@ const HouseholdRegistry: React.FC = () => {
     useEffect(() => {
         // Simulate loading
         const timer = setTimeout(() => {
-            setHouseholds(generateMockHouseholds(20));
+            setHouseholds(demoHouseholds);
             setLoading(false);
         }, 1200);
         return () => clearTimeout(timer);

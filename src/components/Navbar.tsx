@@ -1,46 +1,21 @@
-import React from 'react';
+﻿import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Bell, Menu, MessageCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import LanguageToggle from './LanguageToggle';
-import { Bell, Search, User as UserIcon } from 'lucide-react';
+import { demoAlerts } from '../data/workspace';
+import WorkspaceDialog from './WorkspaceDialog';
 
-const Navbar: React.FC = () => {
+export default function Navbar({ onMenu }: { onMenu: () => void }) {
+    const { pathname } = useLocation();
     const { user } = useAuth();
-    const { t } = useTranslation();
-
-    return (
-        <header className="h-16 bg-white border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-10">
-            <div className="flex items-center gap-4 bg-slate-50 px-4 py-2 rounded-full w-96">
-                <Search size={18} className="text-slate-400" />
-                <input
-                    type="text"
-                    placeholder={t('common.search') + "..."}
-                    className="bg-transparent border-none outline-none text-sm w-full"
-                />
-            </div>
-
-            <div className="flex items-center gap-6">
-                <LanguageToggle />
-
-                <button className="relative p-2 text-slate-500 hover:bg-slate-50 rounded-full transition-colors">
-                    <Bell size={20} />
-                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-                </button>
-
-                <div className="flex items-center gap-3 pl-6 border-l border-slate-100">
-                    <div className="text-right">
-                        <p className="text-sm font-bold text-slate-900">{user?.name}</p>
-                        <p className="text-xs font-semibold text-primary/80 uppercase tracking-wider">
-                            {user ? t(`roles.${user.role}`) : ''}
-                        </p>
-                    </div>
-                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-                        <UserIcon size={20} />
-                    </div>
-                </div>
-            </div>
-        </header>
-    );
-};
-
-export default Navbar;
+    const { i18n } = useTranslation();
+    const [notifications, setNotifications] = useState(false);
+    const rw = i18n.language === 'rw';
+    const labels: Record<string, string> = rw ? { dashboard: 'Ahabanza', households: 'Imiryango', transfers: 'Gutanga inyana', livestock: 'Amatungo', messages: 'Ijwi ry’umuturage', reports: 'Raporo', admin: 'Abakoresha', programs: 'Gahunda' } : { dashboard: 'Dashboard', households: 'Households', transfers: 'Calf Transfers', livestock: 'Livestock', messages: 'Citizen Voice', reports: 'Reports', admin: 'Users & Roles', programs: 'HGI Programs' };
+    return <header className="workspace-header">
+        <div className="header-title"><button className="icon-button mobile-menu" onClick={onMenu} aria-label="Open navigation"><Menu size={21} /></button><span>{labels[pathname.split('/')[1]] || 'Isonga'}</span></div>
+        <div className="header-actions"><Link to="/messages" className="icon-button message-button" aria-label={rw ? 'Ubutumwa' : 'Citizen messages'}><MessageCircle size={19} strokeWidth={1.25} /></Link><button className="icon-button notification-button" onClick={() => setNotifications(true)} aria-label={rw ? 'Amakuru mashya' : `${demoAlerts.length} recent alerts`}><Bell size={19} strokeWidth={1.4} /><span>{demoAlerts.length}</span></button><span className="workspace-avatar" title={user?.name}>{user?.name.split(' ').map(part => part[0]).slice(0, 2).join('')}</span></div>
+        {notifications && <WorkspaceDialog title={rw ? 'Amakuru mashya' : 'Recent alerts'} onClose={() => setNotifications(false)}><div className="notification-list">{demoAlerts.map(alert => <Link key={alert.id} to={alert.path} onClick={() => setNotifications(false)}><strong>{alert.name}</strong><span>{alert.text}</span><small>{alert.date}</small></Link>)}</div></WorkspaceDialog>}
+    </header>;
+}

@@ -8,6 +8,7 @@ import HouseholdRegistry from './pages/HouseholdRegistry';
 import HouseholdDetail from './pages/HouseholdDetail';
 import RegistrationForm from './pages/RegistrationForm';
 import LivestockMonitoring from './pages/LivestockMonitoring';
+import CalfTransfers from './pages/CalfTransfers';
 import ImihigoAnalytics from './pages/ImihigoAnalytics';
 import CitizenMessages from './pages/CitizenMessages';
 import AdminPanel from './pages/AdminPanel';
@@ -30,6 +31,7 @@ const App: React.FC = () => {
             <Route path="/households/register" element={<RegistrationForm />} />
             <Route path="/programs" element={<HGIPrograms />} />
             <Route path="/livestock" element={<LivestockMonitoring />} />
+            <Route path="/transfers" element={<CalfTransfers />} />
             <Route path="/messages" element={<CitizenMessages />} />
             <Route path="/reports" element={<ImihigoAnalytics />} />
             <Route path="/admin" element={<AdminPanel />} />

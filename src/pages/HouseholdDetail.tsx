@@ -1,4 +1,5 @@
-import React from 'react';
+﻿import React from 'react';
+import { demoHouseholds } from '../data/households';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -25,18 +26,12 @@ const HouseholdDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const { t } = useTranslation();
 
-    // Mock data for a single household
+    const record = demoHouseholds.find(household => household.id === id);
+    if (!record) return <div className="card"><h1>Household not found</h1><Link to="/households" className="text-primary underline">Back to registry</Link></div>;
+
+    // Supplementary demo activity for the selected household
     const household = {
-        id: id || 'HH-1001',
-        headName: 'HABIMANA Jean de Dieu',
-        nid: '1198580012345678',
-        ubudehe: 1,
-        location: {
-            district: 'Nyabihu',
-            sector: 'Muringa',
-            cell: 'Gasiza',
-            village: 'Kovu'
-        },
+        ...record,
         milestones: [
             { step: `Step 1: ${t('registration.steps.basic_info')}`, date: 'Oct 12, 2023', completed: true },
             { step: `Step 2: ${t('registration.steps.hgi_status')}`, date: 'Dec 05, 2023', completed: true },
@@ -45,9 +40,9 @@ const HouseholdDetail: React.FC = () => {
             { step: t('common.status_graduated'), date: 'Pending', completed: false }
         ],
         programs: [
-            { name: 'Girinka', icon: Cow, status: 'Enrolled', date: 'Dec 05, 2023', color: 'bg-emerald-50 text-emerald-600' },
-            { name: 'VUP', icon: Leaf, status: 'Enrolled', date: 'Jan 20, 2024', color: 'bg-blue-50 text-blue-600' },
-            { name: 'Ejo Heza', icon: CreditCard, status: 'Pending', date: 'N/A', color: 'bg-amber-50 text-amber-600' },
+            { name: 'Girinka', icon: Cow, status: record.programs.girinka.status, date: record.programs.girinka.date || 'N/A', color: 'bg-emerald-50 text-emerald-600' },
+            { name: 'VUP', icon: Leaf, status: record.programs.vup.status, date: record.programs.vup.date || 'N/A', color: 'bg-blue-50 text-blue-600' },
+            { name: 'Ejo Heza', icon: CreditCard, status: record.programs.ejo_heza.status, date: record.programs.ejo_heza.date || 'N/A', color: 'bg-amber-50 text-amber-600' },
         ],
         livestock: {
             animalId: 'CW-2045',
@@ -143,8 +138,8 @@ const HouseholdDetail: React.FC = () => {
                                         <span className="text-xs font-medium text-slate-400">{t('common.status')}</span>
                                         <span className={cn(
                                             "text-xs font-bold px-2 py-0.5 rounded",
-                                            p.status === 'Enrolled' ? "text-emerald-600 bg-emerald-50" : "text-amber-600 bg-amber-50"
-                                        )}>{p.status === 'Enrolled' ? t('common.status_enrolled') : t('common.status_pending')}</span>
+                                            (p.status === 'enrolled' || p.status === 'active') ? "text-emerald-600 bg-emerald-50" : "text-amber-600 bg-amber-50"
+                                        )}>{p.status === 'not_eligible' ? t('common.not_applicable') : t(`common.status_${p.status}`)}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-xs font-medium text-slate-400">{t('registration.programs')}</span>
@@ -255,3 +250,4 @@ const HouseholdDetail: React.FC = () => {
 };
 
 export default HouseholdDetail;
+

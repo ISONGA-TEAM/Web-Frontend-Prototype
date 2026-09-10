@@ -1,213 +1,33 @@
-import React from 'react';
+﻿import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-    Users,
-    CheckCircle2,
-    AlertTriangle,
-    MessageSquare,
-    ArrowUpRight,
-    TrendingUp,
-    Clock
-} from 'lucide-react';
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    ResponsiveContainer,
-    BarChart,
-    Bar
-} from 'recharts';
+import { ArrowUpRight, Download, ChevronRight } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useAuth } from '../context/AuthContext';
+import { useWorkspace } from '../context/WorkspaceContext';
+import { demoHouseholds } from '../data/households';
+import { demoAlerts, downloadCsv, formatDemoDate } from '../data/workspace';
 
-const registrationData = [
-    { month: 'Oct', registrations: 120 },
-    { month: 'Nov', registrations: 180 },
-    { month: 'Dec', registrations: 150 },
-    { month: 'Jan', registrations: 210 },
-    { month: 'Feb', registrations: 280 },
-    { month: 'Mar', registrations: 347 },
-];
-
-const coverageData = [
-    { name: 'Girinka', enrolled: 450, target: 500 },
-    { name: 'VUP', enrolled: 320, target: 400 },
-    { name: 'Ejo Heza', enrolled: 480, target: 500 },
-];
-
-const Dashboard: React.FC = () => {
-    const { t } = useTranslation();
-
-    const kpis = [
-        { title: t('dashboard.kpi_total_households'), value: '347 / 500', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
-        { title: t('dashboard.kpi_graduated_ytd'), value: '82', icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-        { title: t('dashboard.kpi_active_alerts'), value: '5', icon: AlertTriangle, color: 'text-amber-600', bg: 'bg-amber-50' },
-        { title: t('dashboard.kpi_pending_messages'), value: '12', icon: MessageSquare, color: 'text-purple-600', bg: 'bg-purple-50' },
+export default function Dashboard() {
+    const { user } = useAuth();
+    const { animals, transfers } = useWorkspace();
+    const { i18n } = useTranslation();
+    const [allAlerts, setAllAlerts] = useState(false);
+    const rw = i18n.language === 'rw';
+    const sectors = [...new Set(demoHouseholds.map(h => h.location.sector))].map(name => ({ name, households: demoHouseholds.filter(h => h.location.sector === name).length, enrolled: demoHouseholds.filter(h => h.location.sector === name && h.programs.girinka.status === 'enrolled').length }));
+    const cards = [
+        { label: rw ? 'Amatungo' : 'Livestock', value: animals.length, color: 'blue', path: '/livestock', note: rw ? 'Amatungo yanditswe' : 'Registered animals' },
+        { label: rw ? 'Imiryango yose' : 'Total Households', value: demoHouseholds.length, color: 'yellow', path: '/households', note: rw ? `Imirenge ${sectors.length}` : `Across ${sectors.length} sectors` },
+        { label: rw ? 'Inyana zatanzwe' : 'Calf Transfers', value: transfers.length, color: 'green', path: '/transfers', note: `${transfers.filter(item => item.status === 'Pending').length} ${rw ? 'zirategereje' : 'awaiting approval'}` },
     ];
-
-    const recentActivity = [
-        { action: t('registration.steps.hgi_status'), target: 'MUKAMANA Solange', time: '10 mins ago', user: 'Agent Marie' },
-        { action: t('livestock.health_event'), target: 'Cow #RW-2034 (Illness)', time: '25 mins ago', user: 'Vet Silas' },
-        { action: t('reports.graduation_rate'), target: 'HABIMANA Jean', time: '1 hour ago', user: 'District Officer' },
-        { action: t('messages.title'), target: 'NYABUHU Sector A', time: '2 hours ago', user: 'System' },
-        { action: t('admin.system_health'), target: 'NIDA Database', time: '4 hours ago', user: 'System' },
-    ];
-
-    return (
-        <div className="space-y-8 animate-in fade-in duration-700">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-display font-bold text-slate-900">{t('dashboard.title')}</h1>
-                    <p className="text-slate-500 mt-1 flex items-center gap-2">
-                        <Clock size={16} />
-                        {t('dashboard.last_updated')}: {new Date().toLocaleTimeString()}
-                    </p>
-                </div>
-                <button className="btn-primary flex items-center gap-2 shadow-lg shadow-primary/20">
-                    <TrendingUp size={18} />
-                    {t('dashboard.view_all')}
-                </button>
+    return <div className="overview-page">
+        <section className="dashboard-welcome"><h1>{rw ? 'Murakaza neza' : 'Welcome'}, {user?.name.split(' ')[0]}</h1><p>{rw ? 'Kurikirana imiryango, amatungo n’ubufasha.' : 'View & manage households, livestock and community support'}</p></section>
+        <div className="overview-stats">{cards.map(card => <Link key={card.path} to={card.path} className={`summary-card ${card.color}`}><div className="summary-main"><h2>{card.label}</h2><div><strong>{card.value.toLocaleString()}</strong><span className="summary-link"><ArrowUpRight size={13} />{rw ? 'Reba' : 'View'}</span></div></div><div className="summary-footer">{card.note}</div></Link>)}</div>
+        <section className="sector-chart panel"><div className="panel-heading"><h2>{rw ? 'Imiryango kuri buri murenge' : 'Households by Sector'}</h2><span>{rw ? 'Amakuru y’icyitegererezo' : 'Demo data'}</span></div><div className="sector-chart-canvas" role="img" aria-label={sectors.map(sector => `${sector.name}: ${sector.households} households`).join(', ')}><ResponsiveContainer width="100%" height="100%"><BarChart data={sectors} margin={{ top: 18, right: 18, bottom: 18, left: 2 }}><CartesianGrid stroke="#edf2f8" vertical={false} /><XAxis dataKey="name" tick={{ fill: '#62718a', fontSize: 11 }} axisLine={false} tickLine={false} dy={9} /><YAxis allowDecimals={false} tick={{ fill: '#62718a', fontSize: 10 }} axisLine={false} tickLine={false} width={32} /><Tooltip cursor={{ fill: '#f3f7f4' }} contentStyle={{ border: '1px solid #e8ecef', borderRadius: 8, fontSize: 12 }} /><Bar dataKey="households" name={rw ? 'Imiryango' : 'Households'} fill="#00643b" radius={[5, 5, 0, 0]} maxBarSize={34} /></BarChart></ResponsiveContainer></div><p className="chart-axis-title">{rw ? 'Umurenge' : 'Sector'}</p></section>
+        <section className="dashboard-lower"><div className="alerts-heading"><h2>{rw ? 'Amakuru mashya' : 'Recent Alerts'}</h2><div><button className="workspace-button" onClick={() => downloadCsv('isonga-alerts.csv', [['Name', 'Alert', 'Date', 'Category'], ...demoAlerts.map(alert => [alert.name, alert.text, alert.date, alert.type])])}><Download size={14} />{rw ? 'Kuramo' : 'Download'}</button><button className="workspace-button dark" onClick={() => setAllAlerts(!allAlerts)}>{allAlerts ? (rw ? 'Reba make' : 'Show less') : (rw ? 'Reba yose' : 'View all')}</button></div></div>
+            <div className="dashboard-bottom-grid"><div className="alert-card panel">{demoAlerts.slice(0, allAlerts ? undefined : 3).map((alert, index) => <Link to={alert.path} className="alert-row" key={alert.id}><span className={`alert-avatar avatar-${index % 3}`}>{alert.name.split(' ').map(part => part[0]).slice(0, 2).join('')}</span><div className="alert-copy"><strong>{alert.name}</strong><span>{alert.text}</span><small>{formatDemoDate(alert.date)}</small></div><ChevronRight size={16} /></Link>)}<p className="demo-footnote">{rw ? 'Amakuru y’icyitegererezo gusa' : 'Fictional records for demonstration'}</p></div>
+                <section className="distribution-card panel"><div><h2>{rw ? 'Ikwirakwizwa rya Girinka' : 'Girinka Distribution'}</h2><p>{rw ? 'Imiryango yanditswe kuri buri murenge' : 'Enrolled households by sector'}</p></div><div className="distribution-bars">{sectors.map(sector => <div key={sector.name}><span>{sector.name}</span><div><i style={{ width: `${sector.enrolled / sector.households * 100}%` }} /></div><strong>{sector.enrolled}</strong></div>)}</div><div className="distribution-footer"><span><i />{rw ? 'Yanditswe muri Girinka' : 'Girinka enrolled'}</span><Link to="/programs">{rw ? 'Reba gahunda' : 'View programs'}<ArrowUpRight size={14} /></Link></div></section>
             </div>
-
-            {/* KPI Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {kpis.map((kpi, idx) => (
-                    <div key={idx} className="card group hover:scale-[1.02] transition-transform cursor-pointer">
-                        <div className="flex items-start justify-between">
-                            <div className={cn("p-3 rounded-2xl", kpi.bg)}>
-                                <kpi.icon size={24} className={kpi.color} />
-                            </div>
-                            <span className="flex items-center gap-1 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">
-                                <ArrowUpRight size={12} />
-                                +12%
-                            </span>
-                        </div>
-                        <div className="mt-4">
-                            <p className="text-sm font-semibold text-slate-500">{kpi.title}</p>
-                            <h3 className="text-2xl font-bold text-slate-900 mt-1">{kpi.value}</h3>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Registration Chart */}
-                <div className="lg:col-span-2 card">
-                    <h3 className="text-lg font-bold text-slate-900 mb-6">{t('dashboard.registration_trend')}</h3>
-                    <div className="h-80 w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={registrationData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
-                                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 12 }} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 12 }} />
-                                <Tooltip
-                                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
-                                    cursor={{ stroke: '#1B4332', strokeWidth: 2 }}
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="registrations"
-                                    stroke="#1B4332"
-                                    strokeWidth={3}
-                                    dot={{ fill: '#F59E0B', r: 4, strokeWidth: 2, stroke: '#fff' }}
-                                    activeDot={{ r: 6, strokeWidth: 0 }}
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                </div>
-
-                {/* Coverage Chart */}
-                <div className="card">
-                    <h3 className="text-lg font-bold text-slate-900 mb-6">{t('dashboard.hgi_coverage')}</h3>
-                    <div className="h-64 w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={coverageData} layout="vertical">
-                                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E2E8F0" />
-                                <XAxis type="number" hide />
-                                <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fill: '#64748B', fontSize: 12 }} width={70} />
-                                <Tooltip cursor={{ fill: 'transparent' }} />
-                                <Bar dataKey="enrolled" fill="#1B4332" radius={[0, 4, 4, 0]} barSize={20} />
-                                <Bar dataKey="target" fill="#F59E0B" fillOpacity={0.2} radius={[0, 4, 4, 0]} barSize={10} />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </div>
-                    <div className="space-y-4 mt-4">
-                        {coverageData.map((item, idx) => (
-                            <div key={idx} className="flex items-center justify-between text-sm">
-                                <span className="font-semibold text-slate-600">{item.name}</span>
-                                <span className="font-bold text-primary">{Math.round((item.enrolled / item.target) * 100)}%</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Bottom Panel */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 card">
-                    <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-lg font-bold text-slate-900">{t('dashboard.households_by_sector')}</h3>
-                        <button className="text-primary text-sm font-bold hover:underline">{t('dashboard.view_all')}</button>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left">
-                            <thead>
-                                <tr className="text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-100">
-                                    <th className="pb-4">{t('registry.table.head_location')}</th>
-                                    <th className="pb-4 text-center">{t('registry.table.head_households') || 'Households'}</th>
-                                    <th className="pb-4 text-center">{t('reports.graduation_rate')}</th>
-                                    <th className="pb-4 text-right">{t('dashboard.registration_trend')}</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-sm font-medium">
-                                {['Muringa', 'Kabatwa', 'Jenda', 'Bigogwe'].map((sector, i) => (
-                                    <tr key={sector} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/50 transition-colors">
-                                        <td className="py-4 text-slate-900">{sector}</td>
-                                        <td className="py-4 text-center text-slate-600">{85 - i * 10}</td>
-                                        <td className="py-4 text-center text-emerald-600 font-bold">{22 - i * 4}</td>
-                                        <td className="py-4 text-right">
-                                            <div className="w-24 h-2 bg-slate-100 rounded-full ml-auto overflow-hidden">
-                                                <div className="h-full bg-primary" style={{ width: `${60 - i * 8}%` }}></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div className="card bg-slate-50 border-none">
-                    <h3 className="text-lg font-bold text-slate-900 mb-6">{t('dashboard.recent_activity')}</h3>
-                    <div className="space-y-6">
-                        {recentActivity.map((activity, idx) => (
-                            <div key={idx} className="flex gap-4 group">
-                                <div className="flex flex-col items-center">
-                                    <div className="w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-primary/10 group-first:ring-primary/20"></div>
-                                    <div className="w-0.5 flex-1 bg-slate-200 mt-2 mb-[-12px]"></div>
-                                </div>
-                                <div className="pb-2">
-                                    <p className="text-sm font-bold text-slate-900">{activity.action}</p>
-                                    <p className="text-xs text-slate-600 mt-0.5">{activity.target}</p>
-                                    <div className="flex items-center gap-2 mt-1.5">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{activity.time}</span>
-                                        <span className="text-[10px] text-primary/60 font-medium whitespace-nowrap">by {activity.user}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-// Helper for classNames (added inside the file as standard practice if no global util is used)
-function cn(...inputs: (string | boolean | null | undefined)[]) {
-    return inputs.filter(Boolean).join(' ');
+        </section>
+    </div>;
 }
-
-export default Dashboard;

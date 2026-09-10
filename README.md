@@ -73,3 +73,16 @@ export default defineConfig([
   },
 ])
 ```
+
+## Demo access
+
+The login page offers five fictional accounts; selecting one fills the form.
+Use password `Isonga2026!` with `district.demo`, `sector.demo`, `agent.demo`, `beneficiary.demo`, or `admin.demo`. Roles come from the account.
+
+Credentials live in `src/data/demo.ts`; 30 deterministic sample households live in `src/data/households.ts` and are shared by the registry and detail pages. Existing dashboard and activity examples remain illustrative. Authentication is client-side prototype behavior, not a production security boundary.
+
+## Dashboard prototype
+
+The authenticated workspace follows the supplied dashboard, calf transfer, and livestock designs. Demo data includes 30 households across 10 sectors, 132 livestock records, and 24 calf transfers. Dashboard totals and livestock species cards derive from the same in-memory records used in the tables.
+
+Use `/dashboard`, `/transfers`, and `/livestock`. Tables support search, filters, pagination, selection, record details, and confirmed deletion; livestock can also be added. Dashboard alerts can be downloaded as CSV. Session changes reset on refresh. Support and Settings are available at the bottom of the sidebar; Settings includes the language switch.
