@@ -3,8 +3,8 @@ import type { User } from '../types';
 // Fictional prototype accounts; not production authentication.
 export const demoPassword = 'Isonga2026!';
 export const demoAccounts: (User & { username: string })[] = [
-    { id: 'demo-district', name: 'Jean Habimana', username: 'district.demo', email: 'district@example.com', role: 'district_officer' },
-    { id: 'demo-sector', name: 'Alice Ingabire', username: 'sector.demo', email: 'sector@example.com', role: 'sector_officer' },
+    { id: 'demo-district', name: 'Jean Habimana', username: 'district.person', email: 'district@example.com', role: 'district_officer' },
+    { id: 'demo-sector', name: 'Alice Ingabire', username: 'sector.person', email: 'sector@example.com', role: 'sector_officer' },
     { id: 'demo-agent', name: 'Marie Uwimana', username: 'agent.demo', email: 'agent@example.com', role: 'agenti' },
     { id: 'demo-beneficiary', name: 'Solange Mukamana', username: 'beneficiary.demo', email: 'beneficiary@example.com', role: 'beneficiary' },
     { id: 'demo-admin', name: 'Eric Mugabo', username: 'admin.demo', email: 'admin@example.com', role: 'admin' },
