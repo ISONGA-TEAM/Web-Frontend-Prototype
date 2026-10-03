@@ -161,7 +161,6 @@ const LandingPage: React.FC = () => {
                             onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
                             className="group flex items-center gap-3 bg-accent text-primary font-bold px-8 py-4 rounded-2xl text-lg hover:scale-105 transition-all shadow-xl shadow-amber-500/25 active:scale-95"
                         >
-                            <Sparkles size={20} />
                             {isAuthenticated ? (isRw ? 'Gana kuri Dashboard' : 'Go to Dashboard') : (isRw ? 'Tangira Ubu' : 'Get Started')}
                             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
                         </button>
