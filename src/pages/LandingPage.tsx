@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -14,11 +14,11 @@ import {
     MapPin,
     CheckCircle2,
     ArrowRight,
-    Sparkles,
     BookOpen,
     Star
 } from 'lucide-react';
 import LanguageToggle from '../components/LanguageToggle';
+import Logo from '../components/Logo';
 
 const stats = [
     { value: '12,400+', label: 'Households Enrolled', labelRw: 'Imiryango Iyanditse' },
@@ -93,25 +93,20 @@ const LandingPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-white text-slate-900 overflow-x-hidden">
-            {/* Navbar */}
-            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100' : 'bg-transparent'}`}>
-                <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            {/* Navbar: floating pill */}
+            <nav className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
+                <div className={`mx-auto flex max-w-6xl items-center justify-between rounded-2xl border px-4 py-2.5 backdrop-blur-xl transition-all duration-300 sm:px-5 ${scrolled ? 'border-slate-200/80 bg-white/90 shadow-lg shadow-slate-900/10' : 'border-white/20 bg-white/10 shadow-lg shadow-black/10'}`}>
+                    <Link to="/" aria-label="Isonga home" className="flex items-center gap-3">
+                        <Logo size={34} light={!scrolled} />
+                        <span className={`hidden text-xs font-medium md:inline ${scrolled ? 'text-slate-400' : 'text-white/60'}`}>Integrated Graduation Platform</span>
+                    </Link>
                     <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center">
-                            <ShieldCheck size={20} className="text-white" />
-                        </div>
-                        <div>
-                            <span className="font-display font-bold text-lg text-slate-900">Isonga</span>
-                            <span className="hidden sm:inline text-xs text-slate-400 ml-2 font-medium">Integrated Graduation Platform</span>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4">
                         <LanguageToggle />
                         <button
                             onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
-                            className="px-5 py-2.5 border-2 border-primary text-primary rounded-xl font-bold text-sm hover:bg-primary hover:text-white transition-all"
+                            className="rounded-xl bg-primary px-5 py-2 text-sm font-bold text-white transition-all hover:bg-primary/85 active:scale-95"
                         >
-                            {isAuthenticated ? (isRw ? 'Dashboard' : 'Dashboard') : (isRw ? 'Injira' : 'Sign In')}
+                            {isAuthenticated ? 'Dashboard' : (isRw ? 'Injira' : 'Sign In')}
                         </button>
                     </div>
                 </div>
@@ -283,23 +278,52 @@ const LandingPage: React.FC = () => {
             </section>
 
             {/* Footer */}
-            <footer className="bg-slate-950 text-white py-12">
-                <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                            <ShieldCheck size={16} className="text-white" />
-                        </div>
+            <footer className="bg-slate-950 text-slate-400">
+                <div className="mx-auto max-w-6xl px-6 pt-16 pb-8">
+                    <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
                         <div>
-                            <p className="font-bold text-white">Isonga Platform</p>
-                            <p className="text-xs text-slate-500">Nyabihu District · Rwanda</p>
+                            <Logo size={38} light />
+                            <p className="mt-5 max-w-xs text-sm leading-relaxed">
+                                {isRw
+                                    ? 'Urubuga rwo gukurikirana iterambere ry’imiryango no gufasha abakozi bo mu murima.'
+                                    : 'One platform for tracking household graduation, managing HGI programs and supporting field teams across the district.'}
+                            </p>
+                            <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-xs font-semibold text-emerald-300">
+                                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+                                {isRw ? 'Sisitemu irakora neza' : 'All systems operational'}
+                            </span>
+                        </div>
+
+                        <div>
+                            <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-white">{isRw ? 'Urubuga' : 'Platform'}</h4>
+                            <ul className="space-y-3 text-sm">
+                                <li><a href="#features" className="transition-colors hover:text-white">{isRw ? 'Ibikubiyemo' : 'Features'}</a></li>
+                                <li><Link to={isAuthenticated ? '/dashboard' : '/login'} className="transition-colors hover:text-white">{isAuthenticated ? 'Dashboard' : (isRw ? 'Injira' : 'Sign in')}</Link></li>
+                                <li><span>{isRw ? 'Gahunda: Girinka · VUP · Ejo Heza' : 'Girinka · VUP · Ejo Heza'}</span></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-white">{isRw ? 'Abafatanyabikorwa' : 'Partners'}</h4>
+                            <ul className="space-y-3 text-sm">
+                                <li>MINALOC</li>
+                                <li>NIDA</li>
+                                <li>RSSB</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-white">{isRw ? 'Aho dukorera' : 'Coverage'}</h4>
+                            <ul className="space-y-3 text-sm">
+                                <li className="flex items-center gap-2"><MapPin size={15} className="shrink-0 text-accent" />Nyabihu District</li>
+                                <li className="pl-[23px]">{isRw ? 'Intara y’Iburengerazuba, Rwanda' : 'Western Province, Rwanda'}</li>
+                            </ul>
                         </div>
                     </div>
-                    <p className="text-xs text-slate-600 text-center">
-                        © 2024 MINALOC — National Social Protection Strategy · Built for Rwanda's Graduation Program
-                    </p>
-                    <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold">
-                        <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                        {isRw ? 'Sisitemu irakora neza' : 'All systems operational'}
+
+                    <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-500 md:flex-row">
+                        <p>© {new Date().getFullYear()} Isonga · {isRw ? 'Byakorewe u Rwanda' : 'Built for Rwanda’s Graduation Program'}</p>
+                        <p>{isRw ? 'Ihuza na Strategy y’Igihugu yo Kurengera Abaturage' : 'Aligned with the National Social Protection Strategy'}</p>
                     </div>
                 </div>
             </footer>

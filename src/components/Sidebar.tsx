@@ -5,6 +5,7 @@ import { Home, Users, CalendarArrowUp, UserRound, Bell, ChartNoAxesCombined, Set
 import { useAuth } from '../context/AuthContext';
 import WorkspaceDialog from './WorkspaceDialog';
 import LanguageToggle from './LanguageToggle';
+import Logo from './Logo';
 
 export default function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
     const { user, logout } = useAuth();
@@ -25,7 +26,7 @@ export default function Sidebar({ open, onClose }: { open: boolean; onClose: () 
     return <>
         {open && <button className="sidebar-scrim" onClick={onClose} aria-label="Close navigation" />}
         <aside className={`workspace-sidebar ${open ? 'is-open' : ''}`}>
-            <div className="sidebar-brand"><NavLink to="/dashboard" onClick={onClose}>Isonga Platform</NavLink><span>{user && t(`roles.${user.role}`)}</span><button className="icon-button mobile-sidebar-close" onClick={onClose} aria-label="Close navigation"><X size={18} /></button></div>
+            <div className="sidebar-brand"><NavLink to="/dashboard" onClick={onClose} aria-label="Isonga"><Logo size={30} /></NavLink><span>{user && t(`roles.${user.role}`)}</span><button className="icon-button mobile-sidebar-close" onClick={onClose} aria-label="Close navigation"><X size={18} /></button></div>
             <nav aria-label="Main navigation" className="workspace-nav">{items.filter(item => user && item.roles.includes(user.role)).map(item => <NavLink key={item.path} to={item.path} onClick={onClose} className={({ isActive }) => `workspace-nav-link ${isActive ? 'active' : ''}`}><item.icon size={19} strokeWidth={1.25} /><span>{item.label}</span></NavLink>)}</nav>
             <div className="sidebar-bottom">
                 <button className="workspace-nav-link" onClick={() => setPanel('support')}><LifeBuoy size={19} strokeWidth={1.5} /><span>{rw ? 'Ubufasha' : 'Support'}</span></button>
