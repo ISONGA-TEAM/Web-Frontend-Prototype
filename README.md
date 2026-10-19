@@ -1,90 +1,72 @@
-# React + TypeScript + Vite
+# Isonga Girinka: web frontend prototype
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + TypeScript + Vite prototype of the **Isonga Girinka Digital Management System**, built from the
+Software Requirements Specification v2.0 (18 October 2026). It runs entirely in the browser on fictional
+Nyabihu pilot data. There is no backend yet: the rules in `src/lib` are the logic the API must implement.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev            # http://localhost:5173
+npm run build          # type-check and production build
+node scripts/check-workspace.mjs   # business-rule tests plus a render of every page for every role
+node scripts/xlsx-check.mjs        # validates the XLSX writer's output (needs python3)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Demo accounts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Password `Isonga2026!`. Roles above Village ask for a one-time code: `246810`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+| Role | Username |
+| --- | --- |
+| System Administrator (grants and revokes permissions) | `admin.demo` |
+| National Programme Officer | `national.demo` |
+| Auditor | `auditor.demo` |
+| Provincial Officer | `province.demo` |
+| District Coordinator (two, so one can approve the other's transfers) | `district.demo`, `district2.demo` |
+| Sector Officer (Bigogwe) | `sector.demo` |
+| Cell Officer (Bigogwe Cell 1) | `cell.demo` |
+| Village Agent (Bigogwe Village 1.1) | `agent.demo` |
+| Beneficiary Household | `household.demo` |
 
-## Demo access
+Every other sector, cell and village has generated staff (`sector.<code>`, `cell.<code>`, `agent.<code>`; see Administration).
+Use **Settings > Reset demo data** to restore the seed.
 
-The login page offers five fictional accounts; selecting one fills the form.
-Use password `Isonga2026!` with `district.demo`, `sector.demo`, `agent.demo`, `beneficiary.demo`, or `admin.demo`. Roles come from the account.
+## Where the SRS lives in the code
 
-Credentials live in `src/data/demo.ts`; 30 deterministic sample households live in `src/data/households.ts` and are shared by the registry and detail pages. Existing dashboard and activity examples remain illustrative. Authentication is client-side prototype behavior, not a production security boundary.
+| SRS | Code |
+| --- | --- |
+| Hierarchy (2.2, REQ-01) | `src/data/hierarchy.ts` |
+| Roles and permissions matrix (2.4.1) | `src/lib/rules.ts` (`can`, `inScope`) |
+| Jurisdiction filtering (REQ-06, C-5) | `src/lib/scope.ts`; every page reads through it |
+| Transfer types, approval chains, state machine (3.5) | `src/lib/rules.ts`, `src/lib/engine.ts` |
+| Request validation (REQ-14) | `validateTransfer` in `src/lib/rules.ts` |
+| Hash-chained ledger (REQ-20) | `appendLedger`, `verifyLedger`, `src/lib/sha256.ts` |
+| Pass-on tasks (REQ-26 to 28) | `passOnTasks` in `src/lib/rules.ts`, `src/pages/PassOn.tsx` |
+| Alerts and thresholds (REQ-38) | `computeAlerts`, `src/pages/Alerts.tsx`, `src/pages/Admin.tsx` |
+| Dashboards, filters, drill-down (REQ-33 to 41) | `src/pages/dash/*`, `src/lib/metrics.ts` |
+| Map (REQ-40) | `src/components/GirinkaMap.tsx` (Leaflet), `mapPoints` in `src/lib/metrics.ts` |
+| Permissions (granted and revoked by the System Administrator) | `src/lib/rules.ts` (`can`, `permissionsOf`), `setPermission` in `src/lib/engine.ts`, `src/pages/Permissions.tsx` |
+| Audit trail (REQ-48) | `audit()` in `src/lib/engine.ts`, `src/pages/Audit.tsx` |
 
-## Dashboard prototype
+Business rules are pure functions, so they can move to the Node/Express API unchanged.
 
-The authenticated workspace follows the supplied dashboard, calf transfer, and livestock designs. Demo data includes 30 households across 10 sectors, 132 livestock records, and 24 calf transfers. Dashboard totals and livestock species cards derive from the same in-memory records used in the tables.
+## Known gaps and deliberate choices
 
-Use `/dashboard`, `/transfers`, and `/livestock`. Tables support search, filters, pagination, selection, record details, and confirmed deletion; livestock can also be added. Dashboard alerts can be downloaded as CSV. Session changes reset on refresh. Support and Settings are available at the bottom of the sidebar; Settings includes the language switch.
-
-Demo sign-in is required on each page load, including refreshes and direct dashboard links. Authentication remains in memory while navigating the app; previously saved browser sessions are ignored.
+- **Not built:** a real AI model (the Assistant is a mock), SMS/email delivery (REQ-46/47, alerts are in-app only), offline
+  sync and PWA install, offline map tiles, official boundary layers (TBD-6), widget layout and resizing (REQ-37),
+  national ID lookup, staff invitations, exit reversal events.
+- **Permissions beyond the SRS** (change request): the System Administrator can give or take away any page, dashboard widget or action for any
+  user (the dashboard is one component assembled from widget permissions), reversibly and with an audited reason. Locked: permission management, hierarchy management and the dashboard.
+  Grants never widen jurisdiction and never move the approval chain (approval stays tied to the role in each slot).
+- **Export preview** (change request): every export first shows the columns, the first rows and the total, then offers CSV, XLSX or a printable view for PDF.
+- **Saved dashboard views** (REQ-37): private by default, shareable downwards only.
+- The change requests and 14 gaps found in SRS v2.0 are written up in `docs/SRS-v2.1-change-request.md` for the authors to decide.
+- **Map positions are placeholders** until MINALOC supplies village centres and boundary GeoJSON. Tiles load from OpenStreetMap, so the map needs internet.
+- **Prototype stand-ins:** the second factor and the household acknowledgment code are shown on screen; photo capture is a
+  list of file names; dashboards recompute on demand instead of reading materialised views; live updates are simulated by
+  a 5-minute refresh.
+- **Spec gaps resolved here** (confirm with MINALOC): a *Rejected* transfer state was added because REQ-15 allows rejecting; a
+  lactating cow may calve again (REQ-25 only lists With Holder or Pregnant); batch allocation is recorded when an animal is
+  registered at the district store; exits use their own evidence workflow rather than the transfer state machine;
+  eligibility criteria are placeholders (`src/data/criteria.ts`).
+- Kinyarwanda strings (`src/locales/rw.json`) are a draft and need review by a native speaker. Missing keys fall back to English.
