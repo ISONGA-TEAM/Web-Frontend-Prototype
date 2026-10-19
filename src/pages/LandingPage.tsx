@@ -21,60 +21,60 @@ import LanguageToggle from '../components/LanguageToggle';
 import Logo from '../components/Logo';
 
 const stats = [
-    { value: '12,400+', label: 'Households Enrolled', labelRw: 'Imiryango Iyanditse' },
-    { value: '84%', label: 'Graduation Rate', labelRw: 'Igipimo cya Graduation' },
-    { value: '5', label: 'Sectors Covered', labelRw: 'Imirenge Ikurikiranwa' },
-    { value: '3', label: 'Active Programs', labelRw: 'Gahunda Zikorwa' },
+    { value: '30', label: 'Districts in the national tree', labelRw: 'Uturere mu rwego rw’igihugu' },
+    { value: '416', label: 'Sectors', labelRw: 'Imirenge' },
+    { value: '2,148', label: 'Cells', labelRw: 'Utugari' },
+    { value: '14,000+', label: 'Villages (Imidugudu)', labelRw: 'Imidugudu' },
 ];
 
 const features = [
     {
         icon: Users,
         color: 'bg-emerald-50 text-emerald-600',
-        title: 'Household Registry',
-        titleRw: 'Inyandiko z\'Imiryango',
-        desc: 'Centralized registry of all vulnerable households with NID verification, Ubudehe classification, and real-time updates.',
-        descRw: 'Inyandiko y\'imiryango yuburire yose hamwe no kugenzura NID, icyiciro cy\'ubudehe, n\'amakuru mashya.'
+        title: 'Household registry and eligibility',
+        titleRw: 'Imiryango n’ibisabwa',
+        desc: 'Register households at village level, assess eligibility against MINALOC criteria, and move nominations from village to cell, sector and district.',
+        descRw: 'Andika imiryango mu mudugudu, usuzume ibisabwa, ukomeze urutonde ugana ku Kagari, Umurenge n’Akarere.'
     },
     {
         icon: Cow,
         color: 'bg-amber-50 text-amber-600',
-        title: 'Livestock Monitoring',
-        titleRw: 'Gukurikirana Amatungo',
-        desc: 'Real-time health tracking of Girinka assets with vet event logs, vaccination schedules, and mortality alerts.',
-        descRw: 'Gukurikirana ubuzima bw\'amatungo mu gihe nyacyo hamwe n\'inkingo, n\'ubutumwa bwihutirwa.'
-    },
-    {
-        icon: TrendingUp,
-        color: 'bg-blue-50 text-blue-600',
-        title: 'Imihigo Analytics',
-        titleRw: 'Imibare y\'Imihigo',
-        desc: 'Performance dashboards, graduation trend analysis, and exportable reports against MINALOC targets.',
-        descRw: 'Gukurikirana imikorere, iterambere rya graduation, no gutanga raporo z\'imikorere.'
-    },
-    {
-        icon: MessageSquare,
-        color: 'bg-purple-50 text-purple-600',
-        title: 'Citizen Messaging',
-        titleRw: 'Ubutumwa bw\'Abaturage',
-        desc: 'Two-way messaging with SMS fallback, broadcast announcements, and voice call scheduling.',
-        descRw: 'Gutumanahana n\'abaturage binyuze mu butumwa, SMS, n\'guhamagara.'
-    },
-    {
-        icon: BarChart3,
-        color: 'bg-rose-50 text-rose-600',
-        title: 'HGI Programs',
-        titleRw: 'Gahunda za HGI',
-        desc: 'Manage Girinka, VUP, and Ejo Heza enrollments with sequencing rules and automatic package assignments.',
-        descRw: 'Cunga gahunda za Girinka, VUP, na Ejo Heza hamwe n\'amategeko y\'urwego.'
+        title: 'Cattle registry and health',
+        titleRw: 'Inyandiko z’inka n’ubuzima bwazo',
+        desc: 'One record per animal and tag, with calving, vaccination, monitoring visits and a health index that explains why an animal is flagged.',
+        descRw: 'Inyandiko imwe kuri buri nka n’ikarita yayo, ibyaro, inkingo n’ubugenzuzi.'
     },
     {
         icon: ShieldCheck,
         color: 'bg-teal-50 text-teal-600',
-        title: 'System Administration',
-        titleRw: 'Ubugenzuzi bwa Sisitemu',
-        desc: 'Role-based access control, audit trails, NIDA integration, and MINALOC database synchronization.',
-        descRw: 'Iyegurwa ry\'inshingano, gukurikirana ibikorwa, na guhuza na NIDA na MINALOC.'
+        title: 'Transfer chain of custody',
+        titleRw: 'Urunana rw’itangwa ry’inka',
+        desc: 'Every handover is requested, approved level by level, dispatched, received and acknowledged, then sealed in a hash-linked ledger anyone authorised can verify.',
+        descRw: 'Buri gutanga gusabwa, kwemezwa ku nzego, kohererezwa, kwakirwa no kwemezwa, bikabikwa mu ibaruwa idashobora guhindurwa.'
+    },
+    {
+        icon: TrendingUp,
+        color: 'bg-blue-50 text-blue-600',
+        title: 'Dynamic dashboards',
+        titleRw: 'Ibiro bihindagurika',
+        desc: 'Role-specific dashboards from national to village, with filters, drill-down along the hierarchy, alerts and progress against Imihigo targets.',
+        descRw: 'Ibiro bihuye n’inshingano guhera ku gihugu kugeza ku mudugudu, bifite akayunguruzo n’Imihigo.'
+    },
+    {
+        icon: BarChart3,
+        color: 'bg-rose-50 text-rose-600',
+        title: 'Pass-on tracking',
+        titleRw: 'Gukurikirana gutanga inyana',
+        desc: 'The first female calf is flagged automatically at the pass-on age, matched to an eligible household and tracked on a board with overdue warnings.',
+        descRw: 'Inyana y’ingore ya mbere ihita imenyekana, igahabwa umuryango wujuje ibisabwa kandi igakurikiranwa.'
+    },
+    {
+        icon: MessageSquare,
+        color: 'bg-purple-50 text-purple-600',
+        title: 'Audit, grievances and data rights',
+        titleRw: 'Igenzura, ibibazo n’uburenganzira ku makuru',
+        desc: 'Every action is audited, households can raise grievances and download their own record, and personal data is masked by role.',
+        descRw: 'Buri gikorwa kirabikwa, imiryango ishobora gutanga ibibazo no gufata amakuru yayo.'
     },
 ];
 
@@ -98,7 +98,7 @@ const LandingPage: React.FC = () => {
                 <div className={`mx-auto flex max-w-6xl items-center justify-between rounded-2xl border px-4 py-2.5 backdrop-blur-xl transition-all duration-300 sm:px-5 ${scrolled ? 'border-slate-200/80 bg-white/90 shadow-lg shadow-slate-900/10' : 'border-white/20 bg-white/10 shadow-lg shadow-black/10'}`}>
                     <Link to="/" aria-label="Isonga home" className="flex items-center gap-3">
                         <Logo size={34} light={!scrolled} />
-                        <span className={`hidden text-xs font-medium md:inline ${scrolled ? 'text-slate-400' : 'text-white/60'}`}>Integrated Graduation Platform</span>
+                        <span className={`hidden text-xs font-medium md:inline ${scrolled ? 'text-slate-400' : 'text-white/60'}`}>Girinka Digital Management System</span>
                     </Link>
                     <div className="flex items-center gap-3">
                         <LanguageToggle />
@@ -139,16 +139,16 @@ const LandingPage: React.FC = () => {
 
                     <h1 className="text-5xl md:text-7xl font-display font-bold text-white leading-tight mb-6">
                         {isRw ? (
-                            <>Gahunda Nziza<br />ya <span className="text-accent">Graduation</span></>
+                            <>Gukurikirana <span className="text-accent">Girinka</span><br />kuva ku gihugu ku mudugudu</>
                         ) : (
-                            <>The Smarter Way to<br />Manage <span className="text-accent">Graduation</span></>
+                            <>Follow every cow,<br />from MINALOC to <span className="text-accent">the village</span></>
                         )}
                     </h1>
 
                     <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
                         {isRw
-                            ? 'Sisitemu igezweho yo gukurikirana iterambere ry\'imiryango yuburire, kugenga gahunda za HGI, no gufasha abaturage gutunga ubutunzi bwabo.'
-                            : 'A modern, integrated platform for tracking household graduation progress, managing HGI programs, and empowering field agents with real-time data.'}
+                            ? 'Sisitemu ikurikirana buri nka n’inyana zatanzwe muri Girinka Munyarwanda, kuva ku rwego rw’igihugu kugeza ku mudugudu.'
+                            : 'One traceable record for every cow and calf distributed under Girinka Munyarwanda: who holds it, where it came from, and which calves are due to be passed on.'}
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -206,13 +206,13 @@ const LandingPage: React.FC = () => {
                         </div>
                     </div>
                     <div className="flex items-center gap-6">
-                        {['MINALOC', 'NIDA', 'RSSB', 'VUP'].map(partner => (
+                        {['MINALOC', 'Girinka Munyarwanda'].map(partner => (
                             <span key={partner} className="text-xs font-bold text-slate-400 uppercase tracking-widest">{partner}</span>
                         ))}
                     </div>
                     <div className="flex items-center gap-2 text-emerald-600">
                         <CheckCircle2 size={16} />
-                        <span className="text-sm font-bold">{isRw ? 'Sisitemu irakora' : 'System Operational'}</span>
+                        <span className="text-sm font-bold">{isRw ? 'Akarere ka mbere ko kugeragezwa' : 'Proposed pilot district'}</span>
                     </div>
                 </div>
             </section>
@@ -226,12 +226,12 @@ const LandingPage: React.FC = () => {
                             <span className="text-sm font-bold">{isRw ? 'Ibikubiyemo' : 'Platform Features'}</span>
                         </div>
                         <h2 className="text-4xl font-display font-bold text-slate-900 mb-4">
-                            {isRw ? 'Ibikubiyemo muri Sisitemu' : 'Everything You Need to Graduate Households'}
+                            {isRw ? 'Ibikubiyemo muri Sisitemu' : 'Built around the Girinka lifecycle'}
                         </h2>
                         <p className="text-slate-500 max-w-xl mx-auto">
                             {isRw
-                                ? 'Ibikoresho byose bigufasha gukurikirana iterambere ry\'imiryango, kugenga gahunda, no gutanga raporo z\'imikorere.'
-                                : 'All the tools you need to track progress, manage programs, and generate actionable reports in one platform.'}
+                                ? 'Guhera ku guhitamo imiryango kugeza ku gutanga inyana no gutanga raporo.'
+                                : 'From selecting households to passing on calves and reporting against Imihigo targets, in one platform.'}
                         </p>
                     </div>
 
@@ -260,12 +260,12 @@ const LandingPage: React.FC = () => {
                 </div>
                 <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
                     <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6">
-                        {isRw ? 'Tangira Gukoresha Isonga Ubu' : 'Ready to Transform Graduation Monitoring?'}
+                        {isRw ? 'Tangira Gukoresha Isonga Ubu' : 'Ready to follow every cow?'}
                     </h2>
                     <p className="text-white/60 text-lg mb-10 max-w-xl mx-auto">
                         {isRw
-                            ? 'Injira muri sisitemu urebe imikorere y\'imiryango mu gihe nyacyo no kugenzura iterambere.'
-                            : 'Sign in to access your dashboard and start monitoring household graduation progress in real time.'}
+                            ? 'Injira urebe inka, inyana n’ibyemezo bikureba.'
+                            : 'Sign in to your jurisdiction’s dashboard to see animals, transfers and pass-on tasks.'}
                     </p>
                     <button
                         onClick={() => navigate(isAuthenticated ? '/dashboard' : '/login')}
@@ -285,12 +285,11 @@ const LandingPage: React.FC = () => {
                             <Logo size={38} light />
                             <p className="mt-5 max-w-xs text-sm leading-relaxed">
                                 {isRw
-                                    ? 'Urubuga rwo gukurikirana iterambere ry’imiryango no gufasha abakozi bo mu murima.'
-                                    : 'One platform for tracking household graduation, managing HGI programs and supporting field teams across the district.'}
+                                    ? 'Urubuga rwo gukurikirana inka za Girinka kuva ku gihugu kugeza ku mudugudu.'
+                                    : 'One platform for tracking Girinka cattle, transfers and pass-ons, from the national level to the village.'}
                             </p>
-                            <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1.5 text-xs font-semibold text-emerald-300">
-                                <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-                                {isRw ? 'Sisitemu irakora neza' : 'All systems operational'}
+                            <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1.5 text-xs font-semibold text-amber-300">
+                                {isRw ? 'Icyitegererezo cy’imbere: amakuru ni ayo mu kwigana' : 'Prototype: all records are fictional'}
                             </span>
                         </div>
 
@@ -299,7 +298,7 @@ const LandingPage: React.FC = () => {
                             <ul className="space-y-3 text-sm">
                                 <li><a href="#features" className="transition-colors hover:text-white">{isRw ? 'Ibikubiyemo' : 'Features'}</a></li>
                                 <li><Link to={isAuthenticated ? '/dashboard' : '/login'} className="transition-colors hover:text-white">{isAuthenticated ? 'Dashboard' : (isRw ? 'Injira' : 'Sign in')}</Link></li>
-                                <li><span>{isRw ? 'Gahunda: Girinka · VUP · Ejo Heza' : 'Girinka · VUP · Ejo Heza'}</span></li>
+                                <li><span>Girinka Munyarwanda</span></li>
                             </ul>
                         </div>
 
@@ -307,8 +306,7 @@ const LandingPage: React.FC = () => {
                             <h4 className="mb-4 text-xs font-bold uppercase tracking-widest text-white">{isRw ? 'Abafatanyabikorwa' : 'Partners'}</h4>
                             <ul className="space-y-3 text-sm">
                                 <li>MINALOC</li>
-                                <li>NIDA</li>
-                                <li>RSSB</li>
+                                <li>MINAGRI</li>
                             </ul>
                         </div>
 
@@ -322,8 +320,8 @@ const LandingPage: React.FC = () => {
                     </div>
 
                     <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-xs text-slate-500 md:flex-row">
-                        <p>© {new Date().getFullYear()} Isonga · {isRw ? 'Byakorewe u Rwanda' : 'Built for Rwanda’s Graduation Program'}</p>
-                        <p>{isRw ? 'Ihuza na Strategy y’Igihugu yo Kurengera Abaturage' : 'Aligned with the National Social Protection Strategy'}</p>
+                        <p>© {new Date().getFullYear()} Isonga · {isRw ? 'Byakorewe u Rwanda' : 'Built for Rwanda’s Girinka programme'}</p>
+                        <p>SRS v2.0</p>
                     </div>
                 </div>
             </footer>

@@ -4,19 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node api.js && vite",
+    "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/leaflet": "^1.9.22",
     "axios": "^1.13.6",
     "clsx": "^2.1.1",
-    "dotenv": "^8.2.0",
     "framer-motion": "^12.36.0",
     "i18next": "^25.8.18",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.577.0",
-    "node-fetch": "^3.3.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-i18next": "^16.5.8",
